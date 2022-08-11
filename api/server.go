@@ -12,7 +12,7 @@ import (
 
 type server struct {
 	cfg *config.Config
-	db  dao.UserDaO
+	db  dao.AuthDaO
 }
 
 type Server interface {
@@ -20,7 +20,7 @@ type Server interface {
 }
 
 func NewServer(cfg *config.Config) Server {
-	db := dao.NewUserDao(cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBHost, cfg.DBPort)
+	db := dao.NewAuthDao(cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBHost, cfg.DBPort)
 	return &server{cfg: cfg, db: db}
 }
 func (s *server) Start() error {

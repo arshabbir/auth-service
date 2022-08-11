@@ -2,7 +2,7 @@ package config
 
 type Config struct {
 	AppPort    string `json:"appport"`
-	DBUser     string `json:"dbname"`
+	DBUser     string `json:"dbuser"`
 	DBPassword string `json:"dbpassword"`
 	DBHost     string `json:"dbhost"`
 	DBPort     int    `json:"dbport"`
@@ -14,7 +14,8 @@ func (c *Config) LoadConfig() error {
 	c.AppPort = ":8082"
 	c.DBHost = "localhost"
 	c.DBPort = 5432
-	c.DBPassword = "p1"
-	c.DBUser = "u1"
+	c.DBPassword = "password"
+	c.DBUser = "postgres"
+	c.DBName = "postgres"
 	return nil
 }
