@@ -20,7 +20,7 @@ type Server interface {
 }
 
 func NewServer(cfg *config.Config) Server {
-	db := dao.NewAuthDao(cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBHost, cfg.DBPort)
+	db := dao.NewAuthDao(cfg.DSN)
 	return &server{cfg: cfg, db: db}
 }
 func (s *server) Start() error {
@@ -45,6 +45,7 @@ func routes(s *server) http.Handler {
 	}))
 
 	r.Get("/ping", s.HandlePing)
+	r.Get("/", s.HandleAuth)
 
 	return r
 }

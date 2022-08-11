@@ -1,21 +1,19 @@
 package config
 
+import (
+	"fmt"
+	"os"
+)
+
 type Config struct {
-	AppPort    string `json:"appport"`
-	DBUser     string `json:"dbuser"`
-	DBPassword string `json:"dbpassword"`
-	DBHost     string `json:"dbhost"`
-	DBPort     int    `json:"dbport"`
-	DBName     string `json:"dbname"`
+	AppPort string `json:"appport"`
+	DSN     string `json:"dsn"`
 }
 
 func (c *Config) LoadConfig() error {
 	// Implement viper load config
-	c.AppPort = ":8082"
-	c.DBHost = "localhost"
-	c.DBPort = 5432
-	c.DBPassword = "password"
-	c.DBUser = "postgres"
-	c.DBName = "postgres"
+
+	c.AppPort = fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
+	c.DSN = os.Getenv("DSN")
 	return nil
 }

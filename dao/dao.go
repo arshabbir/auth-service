@@ -5,7 +5,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 	"time"
 
@@ -23,16 +22,16 @@ type authDao struct {
 type AuthDaO interface {
 }
 
-func NewAuthDao(dbuser, dbpassword, dbname, host string, port int) AuthDaO {
+func NewAuthDao(dsn string) AuthDaO {
 	// Connect using the credientails
 	// connection string
 	//psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	psqlconn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", dbuser, dbpassword, host, port, dbname)
+	//psqlconn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", dbuser, dbpassword, host, port, dbname)
 
 	// open database
-	db, err := sql.Open("postgres", psqlconn)
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		log.Println("error opening  database ", psqlconn, err)
+		log.Println("error opening  database ", dsn, err)
 		return nil
 	}
 
