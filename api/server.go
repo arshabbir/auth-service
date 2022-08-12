@@ -45,7 +45,7 @@ func routes(s *server) http.Handler {
 	}))
 
 	r.Get("/ping", s.HandlePing)
-	r.Get("/", s.HandleAuth)
+	r.Post("/", s.HandleAuth)
 
 	return r
 }
