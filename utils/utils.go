@@ -12,7 +12,6 @@ type apiError struct {
 }
 
 func SendError(w http.ResponseWriter, statuscode int, msg string) error {
-
 	w.WriteHeader(statuscode)
 	w.Header().Add("Content-type", "application/json")
 	payload := apiError{Statuscode: statuscode, Message: msg}

@@ -20,6 +20,12 @@ type authDao struct {
 }
 
 type AuthDaO interface {
+	GetAll(user models.User) ([]*models.User, error)
+	GetByEmail(email string) (*models.User, error)
+	GetOne(id int) (*models.User, error)
+	Update(user models.User) error
+	Delete(ID int) error
+	DeleteByID(id int) error
 }
 
 func NewAuthDao(dsn string) AuthDaO {
@@ -49,7 +55,7 @@ func NewAuthDao(dsn string) AuthDaO {
 	// 	return nil
 	// }
 	// log.Println("Successfuly prepared the statements")
-	return &authDao{db: nil}
+	return &authDao{db: db}
 }
 
 // GetAll returns a slice of all users, sorted by last name
@@ -98,6 +104,7 @@ func (u *authDao) GetByEmail(email string) (*models.User, error) {
 
 	query := `select id, email, first_name, last_name, password, user_active, created_at, updated_at from users where email = $1`
 
+	log.Println(query)
 	var user models.User
 	row := u.db.QueryRowContext(ctx, query, email)
 
@@ -116,6 +123,7 @@ func (u *authDao) GetByEmail(email string) (*models.User, error) {
 		return nil, err
 	}
 
+	log.Println("Returning....", user)
 	return &user, nil
 }
 

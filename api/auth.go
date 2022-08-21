@@ -21,8 +21,20 @@ func (s *server) HandleAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userResponse := models.UserResponse{ID: user.ID, CreatedAt: user.CreatedAt, Active: user.Active, UpdatedAt: user.UpdatedAt}
+	// Validate the password by checking against DB
+	usr, err := s.db.GetByEmail(user.Email)
+	if err != nil {
+		utils.SendError(w, http.StatusUnauthorized, err.Error())
 
+	}
+	log.Println("Validating login")
+	if usr.Password != user.Password {
+		// Need toimplemnet tocken generation logic
+		utils.SendError(w, http.StatusUnauthorized, usr.Password)
+		return
+	}
+	log.Println("Login successful")
+	userResponse := models.UserResponse{ID: usr.ID, CreatedAt: usr.CreatedAt, Active: usr.Active, UpdatedAt: usr.UpdatedAt}
 	if err := json.NewEncoder(w).Encode(&userResponse); err != nil {
 		log.Println("error sending the reponse")
 	}
