@@ -9,11 +9,7 @@ import (
 )
 
 func (s *server) HandleAuth(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
 
-	w.Write([]byte("auth handler invoked"))
-
-	// Need to implement the auth logic using DAO
 	user := models.User{}
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
@@ -25,9 +21,11 @@ func (s *server) HandleAuth(w http.ResponseWriter, r *http.Request) {
 	usr, err := s.db.GetByEmail(user.Email)
 	if err != nil {
 		utils.SendError(w, http.StatusUnauthorized, err.Error())
+		return
 
 	}
 	log.Println("Validating login")
+	log.Println("Recived user object : ", usr)
 	if usr.Password != user.Password {
 		// Need toimplemnet tocken generation logic
 		utils.SendError(w, http.StatusUnauthorized, usr.Password)
@@ -35,6 +33,7 @@ func (s *server) HandleAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("Login successful")
 	userResponse := models.UserResponse{ID: usr.ID, CreatedAt: usr.CreatedAt, Active: usr.Active, UpdatedAt: usr.UpdatedAt}
+	log.Println("Sending user response  ", userResponse)
 	if err := json.NewEncoder(w).Encode(&userResponse); err != nil {
 		log.Println("error sending the reponse")
 	}
